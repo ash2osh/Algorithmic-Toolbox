@@ -17,8 +17,8 @@ def fibonacci_sum_naive(n):
     return sum % 10
 
 
-def test_fibonacci_sum():
-    for i in range(1, 50):
+def test_fibonacci_sum(n):
+    for i in range(1, n + 1):
         print(i, '-->', fibonacci_sum_naive(i), ' === ', fibonacci_sum(i))
 
 
@@ -45,12 +45,22 @@ def fibonacci_sum_slow(n):
 
 # must calc this in less than 1 sec 832564823476
 def fibonacci_sum(n):
-    return calc_fib(n % 60) % 10
+    if n <= 1:
+        return n
+    total = 1
+    mod = n % 60
+    if mod == 0:
+        return 0
+    for i in range(2, mod + 1):
+        total += calc_fib(i) % 10
+
+    return total % 10
 
 
 if __name__ == '__main__':
     # input = sys.stdin.read()
     n = int(input())
-    test_fibonacci_sum()
+    test_fibonacci_sum(n)
+    # print(fibonacci_sum(n))
     # print(fibonacci_sum_naive(n))
     # print(fibonacci_sum(n))
