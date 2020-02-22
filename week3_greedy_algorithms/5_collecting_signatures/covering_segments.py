@@ -12,33 +12,36 @@ def points_in_segment(points, s):
 
 def optimal_points(segments):
     points = []
-    prevSeg = Segment(0, 0)
-    while len(segments) > 0:
-        if len(segments) == 1:
-            if points_in_segment(points, segments[0]) == 1:
+    segs = []
+    for s in sorted(segments):
+        segs.append(Segment(s.start, s.end))
+
+    while len(segs) > 0:
+        if len(segs) == 1:
+            if points_in_segment(points, segs[0]) == 1:
                 break
             else:
-                points.append(segments[0].end)
+                points.append(segs[0].end)
                 break
-        for s in segments:
-            if (prevSeg.start == 0 and prevSeg.end == 0) or (prevSeg.start == s.start and prevSeg.end == s.end):
-                prevSeg = s
-                continue
-            if points_in_segment(points, s) == 1:  # current segment intersect with prev point
-                segments.remove(s)
-                if prevSeg.start == s.start and prevSeg.end == s.end:
-                    prevSeg = Segment(0, 0)
-                continue
-            if prevSeg.start <= s.end <= prevSeg.end:  # current segment end between prev segment
-                points.append(s.end)
-                segments.remove(s)
-                continue
-            elif s.start <= prevSeg.end <= s.end:  # prev segment end between current segment
-                points.append(prevSeg.end)
-                segments.remove(prevSeg)
-            prevSeg = s
-
-    return points
+        prevSeg = segs[0]
+        currSeg = segs[1]
+        if points_in_segment(points, prevSeg) == 1:  # current segment intersect with prev point
+            segs.remove(prevSeg)
+            if points_in_segment(points, currSeg) == 1:
+                segs.remove(currSeg)
+            continue
+        if prevSeg.start <= currSeg.end <= prevSeg.end:  # current segment end between prev segment
+            points.append(currSeg.end)
+            segs.remove(currSeg)
+            segs.remove(prevSeg)
+        elif currSeg.start <= prevSeg.end <= currSeg.end:  # prev segment end between current segment
+            points.append(prevSeg.end)
+            segs.remove(prevSeg)
+            segs.remove(currSeg)
+        else:
+            points.append(prevSeg.end)
+            segs.remove(prevSeg)
+    return list(set(points)) # unique list
 
 
 if __name__ == '__main__':
