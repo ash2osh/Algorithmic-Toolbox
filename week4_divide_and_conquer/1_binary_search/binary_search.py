@@ -1,5 +1,5 @@
 def binary_search_recursive(keys, mn, mx, query):
-    md = int((mx - mn) / 2)
+    md = int((mx - mn) / 2) + mn
     if mx - mn <= 1:
         if query == keys[mn]:
             return mn
@@ -17,9 +17,23 @@ def binary_search_recursive(keys, mn, mx, query):
 
 
 def binary_search(keys, query):
-    mn, mx = 0, len(keys)-1
-    while 1:
-        md =
+    mn, mx = 0, len(keys) - 1
+    while mn < mx:
+        md = int((mx - mn) / 2) + mn
+        if mx - mn <= 1:
+            if query == keys[mn]:
+                return mn
+            elif query == keys[mx]:
+                return mx
+            else:
+                return -1
+        if query == keys[md]:
+            return md
+        elif query > keys[md]:
+            mn = md + 1
+        elif query < keys[md]:
+            mx = md - 1
+    return -1
 
 
 def linear_search(a, x):
@@ -40,9 +54,9 @@ if __name__ == '__main__':
     for q in input_queries:
         print(binary_search_recursive(input_keys, mn, mx, q), end=' ')
 
-    # print()
-    # for q in input_queries:
-    #     print(binary_search(input_keys, q), end=' ')
+    print()
+    for q in input_queries:
+        print(binary_search(input_keys, q), end=' ')
 # input
 #
 
