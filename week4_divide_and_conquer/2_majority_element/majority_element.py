@@ -1,18 +1,32 @@
-# Uses python3
-import sys
+def majority_element_naive(elements):
+    assert len(elements) <= 10 ** 5
+    for e in elements:
+        if elements.count(e) > len(elements) / 2:
+            return 1
 
-def get_majority_element(a, left, right):
-    if left == right:
-        return -1
-    if left + 1 == right:
-        return a[left]
-    #write your code here
-    return -1
+    return 0
+
+
+def get_majority_element_divide(elements):
+    pass
+
+
+def get_majority_element(elements):
+    els = {}  # dictionary
+    for e in elements:
+        if e in els:
+            els[e] = els[e] + 1
+        else:
+            els[e] = 1
+    if max(els.values()) > len(elements) / 2:
+        return 1
+    else:
+        return 0
+
 
 if __name__ == '__main__':
-    input = sys.stdin.read()
-    n, *a = list(map(int, input.split()))
-    if get_majority_element(a, 0, n) != -1:
-        print(1)
-    else:
-        print(0)
+    input_n = int(input())
+    input_elements = list(map(int, input().split()))
+    print(majority_element_naive(input_elements))
+    print(get_majority_element(input_elements))
+    print(get_majority_element_divide(input_elements))
