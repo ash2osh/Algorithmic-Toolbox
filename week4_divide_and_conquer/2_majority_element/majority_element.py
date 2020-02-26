@@ -8,7 +8,7 @@ def majority_element_naive(elements):
 
 
 def get_majority_element_divide(elements):
-    pass
+    m = int(len(elements) / 2)
 
 
 def get_majority_element(elements):

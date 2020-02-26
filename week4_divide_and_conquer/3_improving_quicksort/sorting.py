@@ -48,14 +48,14 @@ def randomized_quick_sort(array, left, right):
     randomized_quick_sort(array, m + 1, right)
 
 
-def randomized_quick_sort_x(a, l, r):
-    if l >= r:
+def randomized_quick_sort_x(a, left, right):
+    if left >= right:
         return
-    k = random.randint(l, r)
-    a[l], a[k] = a[k], a[l]
-    m = partition2(a, l, r)
-    randomized_quick_sort_x(a, l, m - 1);
-    randomized_quick_sort_x(a, m + 1, r);
+    k = random.randint(left, right)
+    a[left], a[k] = a[k], a[left]
+    m = partition2(a, left, right)
+    randomized_quick_sort_x(a, left, m - 1)
+    randomized_quick_sort_x(a, m + 1, right)
 
 
 def print_array(array):
