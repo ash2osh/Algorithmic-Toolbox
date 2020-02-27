@@ -1,4 +1,5 @@
-def optimal_sequence_rec(n):
+# dynamic version
+def optimal_sequence(n):
     operations = []
     minOperations = []
     if n == 1:
@@ -27,6 +28,39 @@ def optimal_sequence_rec(n):
     return minOperations
 
 
+def optimal_sequence_rec(n):
+    operations = []
+    minOperations = []
+    if n == 1:
+        return [1]
+    elif n <= 0:
+        return [-1]
+
+    for i in [1, 2, 3]:
+        x = []
+        if i == 1:
+            next_n = n - 1
+        elif n % i == 0:
+            next_n = n // i
+        else:
+            next_n = n - 1
+        if next_n == 1:
+            x.append(n)
+            x.append(1)
+        elif next_n < n:
+            x.append(n)
+            if next_n in db:
+                x.extend(db[next_n])
+            else:
+                x.extend(optimal_sequence(next_n))
+        if -1 not in x:  # dos not contain -1
+            operations.append(x)
+    if len(operations) > 0:
+        minOperations += min(operations, key=len)  # https://stackoverflow.com/questions/18741633
+        db[n] = minOperations
+    return minOperations
+
+
 def optimal_sequence_greedy(n):
     sq = []
     while n >= 1:
@@ -46,8 +80,11 @@ def print_array(array):
 
 
 input_n = int(input())
+db = {}
 sequence = list(optimal_sequence_greedy(input_n))
 print(len(sequence) - 1)
 print_array(sequence)
+print()
+print_array(reversed(optimal_sequence(input_n)))
 print()
 print_array(reversed(optimal_sequence_rec(input_n)))
