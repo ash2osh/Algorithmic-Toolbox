@@ -1,6 +1,11 @@
-# Uses python3
-import sys
 import itertools
+
+
+def part(A):
+    if sum(A) % 3 != 0:
+        return 0
+
+
 
 def partition3(A):
     for c in itertools.product(range(3), repeat=len(A)):
@@ -13,8 +18,9 @@ def partition3(A):
 
     return 0
 
-if __name__ == '__main__':
-    input = sys.stdin.read()
-    n, *A = list(map(int, input.split()))
-    print(partition3(A))
 
+if __name__ == '__main__':
+    n = input()
+    A = list(map(int, input().split()))
+    print(partition3(A))
+    print(part(A))
