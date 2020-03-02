@@ -38,4 +38,4 @@ if __name__ == '__main__':
     n = input()
     A = list(map(int, input().split()))
     print(partition3(A))
-    print(part(A))
+    # print(part(A))
