@@ -38,28 +38,44 @@
 
 # wrong answer
 def optimal_weight(knapsack, weights):
-    if knapsack <= 0:
-        return 0
-    # if knapsack in db:
-    #     return db[knapsack]
-    if (knapsack, tuple(weights)) in db:
-        return db[(knapsack, tuple(weights))]
-    weights_range = sorted(i for i in weights if i < knapsack)
-    weights_range.append(knapsack)
-    mx = 0
-    for i in weights_range:
-        mx = 0
-        mxLst = []
-        for g in weights:
-            if g <= i:
-                new_weights = weights.copy()
-                new_weights.remove(g)
-                mxLst.append(g + optimal_weight(i - g, new_weights))
-        if len(mxLst) > 0:
-            mx = max(mxLst)
-        db[(i, tuple(weights))] = mx
+    weights = [0] + weights
+    items = len(weights)
+    capacity = knapsack + 1
 
-    return mx
+    # Create a matrix with initial values.
+    matrix = [[0 for _ in range(items)] for _ in range(capacity)]
+
+    for j in range(1, items):
+        for i in range(1, capacity):
+            prev = matrix[i][j - 1]
+            if weights[j] == i:
+                cur = weights[j]
+            else:
+                cur = weights[j] + matrix[knapsack - weights[j]][j - 1]
+            if cur > i:
+                matrix[i][j] = prev
+            else:
+                matrix[i][j] = max(prev, cur)
+
+    return matrix[-1][-1]
+
+
+def optimal_weight2(knapsack, weights):
+    # Create n nested arrays of 0 * (W + 1)
+    max_vals = [[0] * (knapsack + 1) for x in range(len(weights))]
+    # Set max_vals[0] to wt[0] if wt[0] <= j
+    max_vals[0] = [weights[0] if weights[0] <= j else 0 for j in range(knapsack + 1)]
+    for i in range(1, len(weights)):
+        for j in range(1, knapsack + 1):
+            value = max_vals[i - 1][j]  # previous i @ same j
+            if weights[i] <= j:
+                val = (max_vals[i - 1][j - weights[i]]) + weights[i]
+                if value < val:
+                    value = val
+                    max_vals[i][j] = value
+                else:
+                    max_vals[i][j] = value  # set to [i - 1][j]
+    return max_vals[-1][-1]
 
 
 def optimal_weight_unique_rec(knapsack, weights):
@@ -113,4 +129,5 @@ if __name__ == '__main__':
     lookup = 0
     # print(W, n, w)
     print(optimal_weight(W, w))
+    print(optimal_weight2(W, w))
     # print(optimal_weight_unique_rec(W, w))
